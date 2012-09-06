@@ -1,5 +1,14 @@
+require 'pow_debugger/config'
 module PowDebugger
-  DEBUGGER_PORT = Random.new(Rails.application.class.to_s.unpack('q*').first).rand(15000...65000)
+  class << self
+    def config
+      @config ||= Config.new
+    end
 
-  require 'pow_debugger/railtie' if defined?(Rails) && defined?(Rails::Railtie)
+    def configure
+      yield self.config
+    end
+  end
 end
+
+require 'pow_debugger/railtie' if defined?(Rails) && defined?(Rails::Railtie)
